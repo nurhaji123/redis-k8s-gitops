@@ -1,5 +1,5 @@
 api:
-  replicaCount: 2
+  replicaCount: 3
 
   image:
     repository: redis-assignment-api
