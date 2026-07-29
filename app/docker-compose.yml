@@ -1,0 +1,22 @@
+services:
+
+  api:
+    build: .
+    container_name: python-api-container
+    ports:
+      - "8000:8000"
+    depends_on:
+      - redis
+    networks:
+      - app-network
+
+  redis:
+    image: redis:7
+    container_name: redis
+    networks:
+      - app-network
+
+
+networks:
+
+  app-network:

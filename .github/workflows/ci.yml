@@ -17,4 +17,4 @@ jobs:
         run: ls -la
 
       - name: Build Docker image
-        run: docker build -t redis-assignment-api:${{ github.sha }} .
+        run: docker build -t redis-assignment-api:${{ github.sha }} ./app
