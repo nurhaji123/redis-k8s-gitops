@@ -6,7 +6,7 @@ on:
       - main
 
 permissions:
-  contents: read
+  contents: write
   packages: write
 
 env:
@@ -14,7 +14,7 @@ env:
   IMAGE_NAME: nurhaji123/redis-assignment-api
 
 jobs:
-  build-and-push:
+  build-push-and-update:
     runs-on: ubuntu-latest
 
     steps:
@@ -44,3 +44,26 @@ jobs:
         run: |
           docker push \
             ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:latest
+
+      - name: Update Helm image tag
+        run: |
+          sed -i \
+            '/^[[:space:]]*image:/,/^[^[:space:]]/ s|^[[:space:]]*tag:.*|    tag: "${{ github.sha }}"|' \
+            redis-app/values.yaml
+
+      - name: Show updated Helm values
+        run: cat redis-app/values.yaml
+
+      - name: Commit updated Helm values
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+
+          git add redis-app/values.yaml
+
+          if git diff --cached --quiet; then
+            echo "No Helm values changes to commit."
+          else
+            git commit -m "Update API image tag to ${{ github.sha }}"
+            git push
+          fi
