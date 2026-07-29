@@ -11,10 +11,13 @@ jobs:
 
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
 
       - name: Show repository files
         run: ls -la
+
+      - name: Show app directory
+        run: ls -la ./app
 
       - name: Build Docker image
         run: docker build -t redis-assignment-api:${{ github.sha }} ./app
