@@ -2,9 +2,9 @@ api:
   replicaCount: 3
 
   image:
-    repository: redis-assignment-api
+    repository: ghcr.io/nurhaji123/redis-assignment-api
     tag: latest
-    pullPolicy: Never
+    pullPolicy: IfNotPresent
 
   containerPort: 8000
 
@@ -41,3 +41,4 @@ ingress:
   host: localhost
   path: /
   pathType: Prefix
+DD
