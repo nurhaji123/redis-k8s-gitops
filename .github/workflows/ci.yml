@@ -1,4 +1,4 @@
-name: First CI Workflow
+name: CI Workflow
 
 on:
   push:
@@ -6,18 +6,15 @@ on:
       - main
 
 jobs:
-  hello:
+  build:
     runs-on: ubuntu-latest
 
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: Show current directory
-        run: pwd
-
-      - name: List repository files
+      - name: Show repository files
         run: ls -la
 
-      - name: Print message
-        run: echo "Hello from GitHub Actions!"
+      - name: Build Docker image
+        run: docker build -t redis-assignment-api:${{ github.sha }} .
