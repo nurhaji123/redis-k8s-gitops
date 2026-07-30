@@ -3,7 +3,7 @@ api:
 
   image:
     repository: ghcr.io/nurhaji123/redis-assignment-api
-    tag: "c814c4f803bec1c0a8e606be3ca3649868df9500"
+    tag: "9063817f1d7ebd44270a3265600a8c1bf080182a"
     pullPolicy: IfNotPresent
 
   containerPort: 8000
