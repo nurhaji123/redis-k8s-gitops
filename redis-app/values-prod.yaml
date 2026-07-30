@@ -3,7 +3,7 @@ api:
 
   image:
     repository: ghcr.io/nurhaji123/redis-assignment-api
-    tag: "c0b79a9c562b33474452c6bd5cbdd552446beafd"
+    tag: latest
     pullPolicy: IfNotPresent
 
   containerPort: 8000
@@ -38,6 +38,6 @@ secret:
 ingress:
   enabled: true
   className: nginx
-  host: localhost
+  host: redis-prod.local
   path: /
   pathType: Prefix
