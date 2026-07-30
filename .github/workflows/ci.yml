@@ -45,10 +45,10 @@ jobs:
           docker push \
             ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:latest
 
-      - name: Update Helm image tag
+      - name: Update API image tag in Helm values
         run: |
           sed -i \
-            '/^[[:space:]]*image:/,/^[^[:space:]]/ s|^[[:space:]]*tag:.*|    tag: "${{ github.sha }}"|' \
+            '/^api:/,/^redis:/ s|^[[:space:]]*tag:.*|    tag: "${{ github.sha }}"|' \
             redis-app/values.yaml
 
       - name: Show updated Helm values

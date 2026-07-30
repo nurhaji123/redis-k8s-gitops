@@ -18,7 +18,7 @@ redis:
 
   image:
     repository: redis
-    tag: "3f72af833b5a2a551a52b6d184edcfbb22e78239"
+    tag: "7"
     pullPolicy: IfNotPresent
 
   containerPort: 6379
