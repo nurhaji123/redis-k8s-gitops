@@ -1,6 +1,0 @@
-apiVersion: v1
-kind: ConfigMap
-metadata:
-  name: prune-test
-data:
-  message: "This resource exists only to test Argo CD pruning."
