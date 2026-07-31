@@ -1,69 +1,66 @@
-name: CI Workflow
+name: Build and publish API image
 
 on:
   push:
     branches:
       - main
+    paths:
+      - "redis-assignment/**"
 
 permissions:
   contents: write
   packages: write
 
-env:
-  REGISTRY: ghcr.io
-  IMAGE_NAME: nurhaji123/redis-assignment-api
+concurrency:
+  group: api-image-${{ github.ref }}
+  cancel-in-progress: false
 
 jobs:
-  build-push-and-update:
+  build-and-publish:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout repository
-        uses: actions/checkout@v5
+      - name: Check out repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
 
       - name: Log in to GitHub Container Registry
         uses: docker/login-action@v3
         with:
-          registry: ${{ env.REGISTRY }}
+          registry: ghcr.io
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Build Docker image
-        run: |
-          docker build \
-            -t ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:${{ github.sha }} \
-            -t ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:latest \
-            ./app
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
 
-      - name: Push commit-tagged image
-        run: |
-          docker push \
-            ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:${{ github.sha }}
-
-      - name: Push latest image
-        run: |
-          docker push \
-            ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:latest
+      - name: Build and push API image
+        uses: docker/build-push-action@v6
+        with:
+          context: ./redis-assignment
+          file: ./redis-assignment/Dockerfile
+          push: true
+          tags: ghcr.io/${{ github.repository_owner }}/redis-assignment-api:${{ github.sha }}
 
       - name: Update API image tag in Helm values
         run: |
           sed -i \
-            '/^api:/,/^redis:/ s|^[[:space:]]*tag:.*|    tag: "${{ github.sha }}"|' \
+            '/^api:/,/^redis:/ s/^[[:space:]]*tag:.*/    tag: "${{ github.sha }}"/' \
             redis-app/values.yaml
 
-      - name: Show updated Helm values
-        run: cat redis-app/values.yaml
-
-      - name: Commit updated Helm values
+      - name: Commit updated API image tag
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
 
-          git add redis-app/values.yaml
-
-          if git diff --cached --quiet; then
-            echo "No Helm values changes to commit."
-          else
-            git commit -m "Update API image tag to ${{ github.sha }}"
-            git push
+          if git diff --quiet -- redis-app/values.yaml; then
+            echo "The API image tag is already current."
+            exit 0
           fi
+
+          git add redis-app/values.yaml
+          git commit -m "Update API image tag to ${{ github.sha }} [skip ci]"
+
+          git pull --rebase origin main
+          git push origin HEAD:main
