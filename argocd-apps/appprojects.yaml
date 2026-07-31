@@ -1,0 +1,82 @@
+apiVersion: argoproj.io/v1alpha1
+kind: AppProject
+metadata:
+  name: platform
+  namespace: argocd
+  finalizers:
+    - resources-finalizer.argocd.argoproj.io
+spec:
+  description: Platform project for managing Argo CD applications and projects
+
+  sourceRepos:
+    - https://github.com/nurhaji123/redis-k8s-gitops.git
+
+  destinations:
+    - server: https://kubernetes.default.svc
+      namespace: argocd
+
+  namespaceResourceWhitelist:
+    - group: argoproj.io
+      kind: Application
+    - group: argoproj.io
+      kind: AppProject
+
+---
+apiVersion: argoproj.io/v1alpha1
+kind: AppProject
+metadata:
+  name: redis-dev
+  namespace: argocd
+  finalizers:
+    - resources-finalizer.argocd.argoproj.io
+spec:
+  description: Development environment for the Redis FastAPI application
+
+  sourceRepos:
+    - https://github.com/nurhaji123/redis-k8s-gitops.git
+
+  destinations:
+    - server: https://kubernetes.default.svc
+      namespace: redis-dev
+
+  namespaceResourceWhitelist:
+    - group: ""
+      kind: ConfigMap
+    - group: ""
+      kind: Secret
+    - group: ""
+      kind: Service
+    - group: apps
+      kind: Deployment
+    - group: networking.k8s.io
+      kind: Ingress
+
+---
+apiVersion: argoproj.io/v1alpha1
+kind: AppProject
+metadata:
+  name: redis-prod
+  namespace: argocd
+  finalizers:
+    - resources-finalizer.argocd.argoproj.io
+spec:
+  description: Production environment for the Redis FastAPI application
+
+  sourceRepos:
+    - https://github.com/nurhaji123/redis-k8s-gitops.git
+
+  destinations:
+    - server: https://kubernetes.default.svc
+      namespace: redis-prod
+
+  namespaceResourceWhitelist:
+    - group: ""
+      kind: ConfigMap
+    - group: ""
+      kind: Secret
+    - group: ""
+      kind: Service
+    - group: apps
+      kind: Deployment
+    - group: networking.k8s.io
+      kind: Ingress
