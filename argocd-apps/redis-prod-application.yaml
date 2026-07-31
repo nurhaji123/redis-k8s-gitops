@@ -4,7 +4,7 @@ metadata:
   name: redis-prod
   namespace: argocd
 spec:
-  project: default
+  project: redis-prod
 
   source:
     repoURL: https://github.com/nurhaji123/redis-k8s-gitops.git
