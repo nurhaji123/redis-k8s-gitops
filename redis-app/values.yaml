@@ -32,8 +32,8 @@ config:
   redisHost: redis
   redisPort: "6379"
 
-secret:
-  redisPassword: example-password
+sealedSecret:
+  redisPassword: ""
 
 ingress:
   enabled: true
