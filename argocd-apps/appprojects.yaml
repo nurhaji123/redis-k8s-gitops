@@ -50,6 +50,8 @@ spec:
       kind: Deployment
     - group: networking.k8s.io
       kind: Ingress
+    - group: bitnami.com
+      kind: SealedSecret
 
 ---
 apiVersion: argoproj.io/v1alpha1
@@ -80,3 +82,5 @@ spec:
       kind: Deployment
     - group: networking.k8s.io
       kind: Ingress
+    - group: bitnami.com
+      kind: SealedSecret
