@@ -1,8 +1,9 @@
 apiVersion: apps/v1
 kind: Deployment
-
 metadata:
   name: python-api
+  labels:
+    app: python-api
 
 spec:
   replicas: {{ .Values.api.replicaCount }}
@@ -37,3 +38,11 @@ spec:
                 configMapKeyRef:
                   name: redis-config
                   key: REDIS_PORT
+
+            {{- if .Values.redis.authentication.enabled }}
+            - name: REDIS_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: redis-secret
+                  key: REDIS_PASSWORD
+            {{- end }}

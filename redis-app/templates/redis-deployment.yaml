@@ -1,11 +1,17 @@
 apiVersion: apps/v1
 kind: Deployment
-
 metadata:
   name: redis
+  labels:
+    app: redis
 
 spec:
   replicas: {{ .Values.redis.replicaCount }}
+
+  {{- if .Values.redis.persistence.enabled }}
+  strategy:
+    type: Recreate
+  {{- end }}
 
   selector:
     matchLabels:
@@ -21,5 +27,35 @@ spec:
         - name: redis
           image: "{{ .Values.redis.image.repository }}:{{ .Values.redis.image.tag }}"
           imagePullPolicy: {{ .Values.redis.image.pullPolicy }}
+
+          {{- if .Values.redis.authentication.enabled }}
+          command:
+            - /bin/sh
+            - -c
+
+          args:
+            - exec redis-server --requirepass "$REDIS_PASSWORD"
+
+          env:
+            - name: REDIS_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: redis-secret
+                  key: REDIS_PASSWORD
+          {{- end }}
+
           ports:
             - containerPort: {{ .Values.redis.containerPort }}
+
+          {{- if .Values.redis.persistence.enabled }}
+          volumeMounts:
+            - name: redis-data
+              mountPath: /data
+          {{- end }}
+
+      {{- if .Values.redis.persistence.enabled }}
+      volumes:
+        - name: redis-data
+          persistentVolumeClaim:
+            claimName: redis-data
+      {{- end }}
