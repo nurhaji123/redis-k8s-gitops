@@ -5,7 +5,7 @@ on:
     branches:
       - main
     paths:
-      - "redis-assignment/**"
+      - "app/**"
 
 permissions:
   contents: write
@@ -38,29 +38,28 @@ jobs:
       - name: Build and push API image
         uses: docker/build-push-action@v6
         with:
-          context: ./redis-assignment
-          file: ./redis-assignment/Dockerfile
+          context: ./app
+          file: ./app/Dockerfile
           push: true
           tags: ghcr.io/${{ github.repository_owner }}/redis-assignment-api:${{ github.sha }}
 
-      - name: Update API image tag in Helm values
+      - name: Update development image tag
         run: |
           sed -i \
             '/^api:/,/^redis:/ s/^[[:space:]]*tag:.*/    tag: "${{ github.sha }}"/' \
-            redis-app/values.yaml
+            redis-app/values-dev.yaml
 
-      - name: Commit updated API image tag
+      - name: Commit development image tag
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
 
-          if git diff --quiet -- redis-app/values.yaml; then
-            echo "The API image tag is already current."
+          if git diff --quiet -- redis-app/values-dev.yaml; then
+            echo "The development image tag is already current."
             exit 0
           fi
 
-          git add redis-app/values.yaml
-          git commit -m "Update API image tag to ${{ github.sha }} [skip ci]"
-
+          git add redis-app/values-dev.yaml
+          git commit -m "Update dev API image to ${{ github.sha }} [skip ci]"
           git pull --rebase origin main
           git push origin HEAD:main
