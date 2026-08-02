@@ -3,7 +3,7 @@ api:
 
   image:
     repository: ghcr.io/nurhaji123/redis-assignment-api
-    tag: latest
+    tag: "32fe41dfee7576851f3280a892cade11fb4a5cdf"
     pullPolicy: IfNotPresent
 
   containerPort: 8000
@@ -29,10 +29,10 @@ redis:
     targetPort: 6379
 
   authentication:
-    enabled: false
+    enabled: true
 
   persistence:
-    enabled: false
+    enabled: true
     size: 1Gi
     accessMode: ReadWriteOnce
     storageClass: ""
