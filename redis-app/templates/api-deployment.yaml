@@ -47,6 +47,16 @@ spec:
                   key: REDIS_PASSWORD
             {{- end }}
 
+          {{- if .Values.api.resources.enabled }}
+          resources:
+            requests:
+              cpu: {{ .Values.api.resources.requests.cpu | quote }}
+              memory: {{ .Values.api.resources.requests.memory | quote }}
+            limits:
+              cpu: {{ .Values.api.resources.limits.cpu | quote }}
+              memory: {{ .Values.api.resources.limits.memory | quote }}
+          {{- end }}
+
           {{- if .Values.api.probes.enabled }}
           readinessProbe:
             httpGet:

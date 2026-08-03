@@ -47,6 +47,16 @@ spec:
           ports:
             - containerPort: {{ .Values.redis.containerPort }}
 
+          {{- if .Values.redis.resources.enabled }}
+          resources:
+            requests:
+              cpu: {{ .Values.redis.resources.requests.cpu | quote }}
+              memory: {{ .Values.redis.resources.requests.memory | quote }}
+            limits:
+              cpu: {{ .Values.redis.resources.limits.cpu | quote }}
+              memory: {{ .Values.redis.resources.limits.memory | quote }}
+          {{- end }}
+
           {{- if .Values.redis.probes.enabled }}
           startupProbe:
             exec:

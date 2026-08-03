@@ -31,6 +31,17 @@ api:
       timeoutSeconds: 2
       failureThreshold: 3
 
+  resources:
+    enabled: false
+
+    requests:
+      cpu: 50m
+      memory: 96Mi
+
+    limits:
+      cpu: 250m
+      memory: 256Mi
+
 redis:
   replicaCount: 1
 
@@ -73,6 +84,17 @@ redis:
       periodSeconds: 10
       timeoutSeconds: 2
       failureThreshold: 3
+
+  resources:
+    enabled: false
+
+    requests:
+      cpu: 50m
+      memory: 64Mi
+
+    limits:
+      cpu: 250m
+      memory: 256Mi
 
 config:
   redisHost: redis

@@ -16,6 +16,9 @@ api:
   probes:
     enabled: true
 
+  resources:
+    enabled: true
+
 redis:
   replicaCount: 1
 
@@ -41,6 +44,9 @@ redis:
     storageClass: ""
 
   probes:
+    enabled: true
+
+  resources:
     enabled: true
 
 config:
