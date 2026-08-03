@@ -42,6 +42,10 @@ api:
       cpu: 250m
       memory: 256Mi
 
+  termination:
+    enabled: false
+    gracePeriodSeconds: 30
+
 redis:
   replicaCount: 1
 
@@ -95,6 +99,10 @@ redis:
     limits:
       cpu: 250m
       memory: 256Mi
+
+  termination:
+    enabled: false
+    gracePeriodSeconds: 30
 
 config:
   redisHost: redis

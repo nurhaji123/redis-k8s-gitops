@@ -18,6 +18,10 @@ spec:
         app: python-api
 
     spec:
+      {{- if .Values.api.termination.enabled }}
+      terminationGracePeriodSeconds: {{ .Values.api.termination.gracePeriodSeconds }}
+      {{- end }}
+
       containers:
         - name: python-api
           image: "{{ .Values.api.image.repository }}:{{ .Values.api.image.tag }}"

@@ -23,6 +23,10 @@ spec:
         app: redis
 
     spec:
+      {{- if .Values.redis.termination.enabled }}
+      terminationGracePeriodSeconds: {{ .Values.redis.termination.gracePeriodSeconds }}
+      {{- end }}
+
       containers:
         - name: redis
           image: "{{ .Values.redis.image.repository }}:{{ .Values.redis.image.tag }}"

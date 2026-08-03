@@ -15,4 +15,5 @@ RUN pip install --no-cache-dir -r requirements.txt
 COPY app.py .
 
 # Start the application when the container launches.
-CMD ["uvicorn", "app:app", "--host", "0.0.0.0", "--port", "8000"]
+# Uvicorn gets 25 seconds to complete active requests after SIGTERM.
+CMD ["uvicorn", "app:app", "--host", "0.0.0.0", "--port", "8000", "--timeout-graceful-shutdown", "25"]

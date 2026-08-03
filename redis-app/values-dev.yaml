@@ -19,6 +19,9 @@ api:
   resources:
     enabled: true
 
+  termination:
+    enabled: true
+
 redis:
   replicaCount: 1
 
@@ -47,6 +50,9 @@ redis:
     enabled: true
 
   resources:
+    enabled: true
+
+  termination:
     enabled: true
 
 config:
