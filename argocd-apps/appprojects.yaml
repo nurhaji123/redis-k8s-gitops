@@ -54,6 +54,8 @@ spec:
       kind: Ingress
     - group: bitnami.com
       kind: SealedSecret
+    - group: policy
+      kind: PodDisruptionBudget
 
 ---
 apiVersion: argoproj.io/v1alpha1
@@ -88,3 +90,5 @@ spec:
       kind: Ingress
     - group: bitnami.com
       kind: SealedSecret
+    - group: policy
+      kind: PodDisruptionBudget
