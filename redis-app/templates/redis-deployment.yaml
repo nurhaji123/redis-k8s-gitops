@@ -47,6 +47,51 @@ spec:
           ports:
             - containerPort: {{ .Values.redis.containerPort }}
 
+          {{- if .Values.redis.probes.enabled }}
+          startupProbe:
+            exec:
+              command:
+                - /bin/sh
+                - -c
+                {{- if .Values.redis.authentication.enabled }}
+                - REDISCLI_AUTH="$REDIS_PASSWORD" redis-cli -h 127.0.0.1 -p {{ .Values.redis.containerPort }} ping | grep -q '^PONG$'
+                {{- else }}
+                - redis-cli -h 127.0.0.1 -p {{ .Values.redis.containerPort }} ping | grep -q '^PONG$'
+                {{- end }}
+            periodSeconds: {{ .Values.redis.probes.startup.periodSeconds }}
+            timeoutSeconds: {{ .Values.redis.probes.startup.timeoutSeconds }}
+            failureThreshold: {{ .Values.redis.probes.startup.failureThreshold }}
+
+          readinessProbe:
+            exec:
+              command:
+                - /bin/sh
+                - -c
+                {{- if .Values.redis.authentication.enabled }}
+                - REDISCLI_AUTH="$REDIS_PASSWORD" redis-cli -h 127.0.0.1 -p {{ .Values.redis.containerPort }} ping | grep -q '^PONG$'
+                {{- else }}
+                - redis-cli -h 127.0.0.1 -p {{ .Values.redis.containerPort }} ping | grep -q '^PONG$'
+                {{- end }}
+            periodSeconds: {{ .Values.redis.probes.readiness.periodSeconds }}
+            timeoutSeconds: {{ .Values.redis.probes.readiness.timeoutSeconds }}
+            failureThreshold: {{ .Values.redis.probes.readiness.failureThreshold }}
+            successThreshold: {{ .Values.redis.probes.readiness.successThreshold }}
+
+          livenessProbe:
+            exec:
+              command:
+                - /bin/sh
+                - -c
+                {{- if .Values.redis.authentication.enabled }}
+                - REDISCLI_AUTH="$REDIS_PASSWORD" redis-cli -h 127.0.0.1 -p {{ .Values.redis.containerPort }} ping | grep -q '^PONG$'
+                {{- else }}
+                - redis-cli -h 127.0.0.1 -p {{ .Values.redis.containerPort }} ping | grep -q '^PONG$'
+                {{- end }}
+            periodSeconds: {{ .Values.redis.probes.liveness.periodSeconds }}
+            timeoutSeconds: {{ .Values.redis.probes.liveness.timeoutSeconds }}
+            failureThreshold: {{ .Values.redis.probes.liveness.failureThreshold }}
+          {{- end }}
+
           {{- if .Values.redis.persistence.enabled }}
           volumeMounts:
             - name: redis-data

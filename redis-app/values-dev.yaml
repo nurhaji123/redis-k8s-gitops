@@ -13,6 +13,9 @@ api:
     port: 80
     targetPort: 8000
 
+  probes:
+    enabled: true
+
 redis:
   replicaCount: 1
 
@@ -36,6 +39,9 @@ redis:
     size: 1Gi
     accessMode: ReadWriteOnce
     storageClass: ""
+
+  probes:
+    enabled: true
 
 config:
   redisHost: redis

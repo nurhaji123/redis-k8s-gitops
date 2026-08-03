@@ -13,6 +13,24 @@ api:
     port: 80
     targetPort: 8000
 
+  probes:
+    enabled: false
+
+    readiness:
+      path: /health/ready
+      initialDelaySeconds: 2
+      periodSeconds: 5
+      timeoutSeconds: 2
+      failureThreshold: 3
+      successThreshold: 1
+
+    liveness:
+      path: /health/live
+      initialDelaySeconds: 5
+      periodSeconds: 10
+      timeoutSeconds: 2
+      failureThreshold: 3
+
 redis:
   replicaCount: 1
 
@@ -36,6 +54,25 @@ redis:
     size: 1Gi
     accessMode: ReadWriteOnce
     storageClass: ""
+
+  probes:
+    enabled: false
+
+    startup:
+      periodSeconds: 2
+      timeoutSeconds: 2
+      failureThreshold: 30
+
+    readiness:
+      periodSeconds: 5
+      timeoutSeconds: 2
+      failureThreshold: 3
+      successThreshold: 1
+
+    liveness:
+      periodSeconds: 10
+      timeoutSeconds: 2
+      failureThreshold: 3
 
 config:
   redisHost: redis
