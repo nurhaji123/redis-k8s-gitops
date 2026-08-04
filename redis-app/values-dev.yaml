@@ -22,6 +22,9 @@ api:
   termination:
     enabled: true
 
+  pdb:
+    enabled: true
+
 redis:
   replicaCount: 1
 

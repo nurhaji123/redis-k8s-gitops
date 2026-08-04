@@ -46,6 +46,10 @@ api:
     enabled: false
     gracePeriodSeconds: 30
 
+  pdb:
+    enabled: false
+    maxUnavailable: 1
+
 redis:
   replicaCount: 1
 
