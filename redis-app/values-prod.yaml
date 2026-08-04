@@ -3,7 +3,7 @@ api:
 
   image:
     repository: ghcr.io/nurhaji123/redis-assignment-api
-    tag: "32fe41dfee7576851f3280a892cade11fb4a5cdf"
+    tag: "f7e7bef5600c2726a8d0b22598f32c986b3561ec"
     pullPolicy: IfNotPresent
 
   containerPort: 8000
@@ -12,6 +12,18 @@ api:
     type: ClusterIP
     port: 80
     targetPort: 8000
+
+  probes:
+    enabled: true
+
+  resources:
+    enabled: true
+
+  termination:
+    enabled: true
+
+  pdb:
+    enabled: true
 
 redis:
   replicaCount: 1
@@ -36,6 +48,15 @@ redis:
     size: 1Gi
     accessMode: ReadWriteOnce
     storageClass: ""
+
+  probes:
+    enabled: true
+
+  resources:
+    enabled: true
+
+  termination:
+    enabled: true
 
 config:
   redisHost: redis
